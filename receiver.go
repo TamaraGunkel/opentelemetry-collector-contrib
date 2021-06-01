@@ -83,13 +83,13 @@ func (ddr *datadogReceiver) Shutdown(ctx context.Context) error {
 }
 
 func (ddr *datadogReceiver) handleTraces(w http.ResponseWriter, req *http.Request) {
-	obsreport.StartTraceDataReceiveOp(ddr.longLivedCtx, ddr.config.ID(), "http")
+	obsreport.StartTraceOp(ddr.longLivedCtx, ddr.config.ID(), "http")
 	var ddTraces pb.Traces
 
 	err := decodeRequest(req, &ddTraces)
 	if err != nil {
 		http.Error(w, "Unable to unmarshal reqs", http.StatusInternalServerError)
-		obsreport.EndTraceDataReceiveOp(ddr.longLivedCtx, typeStr, 0, err)
+		obsreport.EndTraceOp(ddr.longLivedCtx, typeStr, 0, err)
 		return
 	}
 
@@ -102,5 +102,5 @@ func (ddr *datadogReceiver) handleTraces(w http.ResponseWriter, req *http.Reques
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte("OK"))
 	}
-	obsreport.EndTraceDataReceiveOp(ddr.longLivedCtx, typeStr, spanCount, err)
+	obsreport.EndTraceOp(ddr.longLivedCtx, typeStr, spanCount, err)
 }

@@ -1,5 +1,4 @@
-module github.com/open-telemetry/opentelemetry-collector-contrib/receiver/datadogreceiver
-
+module github.com/TamaraGunkel/opentelemetry-collector-contrib
 go 1.14
 
 require (

@@ -62,11 +62,11 @@ func ToTraces(traces pb.Traces, req *http.Request) pdata.Traces {
 			}
 			switch span.Type {
 			case "web":
-				newSpan.SetKind(pdata.SpanKindSERVER)
+				newSpan.SetKind(pdata.SpanKindServer)
 			case "client":
-				newSpan.SetKind(pdata.SpanKindCLIENT)
+				newSpan.SetKind(pdata.SpanKindClient)
 			default:
-				newSpan.SetKind(pdata.SpanKindUNSPECIFIED)
+				newSpan.SetKind(pdata.SpanKindUnspecified)
 			}
 
 		}

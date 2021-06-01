@@ -22,6 +22,7 @@ import (
 	"go.opentelemetry.io/collector/consumer/pdata"
 	"go.opentelemetry.io/collector/translator/conventions"
 	tracetranslator "go.opentelemetry.io/collector/translator/trace"
+	idutils "go.opentelemetry.io/collector/internal/idutils"
 
 	"mime"
 	"net/http"
@@ -39,11 +40,11 @@ func ToTraces(traces pb.Traces, req *http.Request) pdata.Traces {
 	for _, trace := range traces {
 		for _, span := range trace {
 			newSpan := ils.Spans().AppendEmpty() // TODO: Might be more efficient to resize spans and then populate it
-			newSpan.SetTraceID(tracetranslator.UInt64ToTraceID(0, span.TraceID))
-			newSpan.SetSpanID(tracetranslator.UInt64ToSpanID(span.SpanID))
+			newSpan.SetTraceID(idutils.UInt64ToTraceID(0, span.TraceID))
+			newSpan.SetSpanID(idutils.UInt64ToSpanID(span.SpanID))
 			newSpan.SetStartTimestamp(pdata.Timestamp(span.Start))
 			newSpan.SetEndTimestamp(pdata.Timestamp(span.Start + span.Duration))
-			newSpan.SetParentSpanID(tracetranslator.UInt64ToSpanID(span.ParentID))
+			newSpan.SetParentSpanID(idutils.UInt64ToSpanID(span.ParentID))
 			newSpan.SetName(span.Name)
 			newSpan.Attributes().InsertString(conventions.AttributeServiceName, span.Service)
 
